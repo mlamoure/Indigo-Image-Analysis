@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<PluginConfig>
+	<SupportURL>https://github.com/mlamoure/</SupportURL>
+
+			<Field id="loginDescription"
+			            type="label">
+			        <Label>You will need a API key to use this plugin.  Sign up for Google Cloud Vision or AWS Rekognition</Label>
+			</Field>
+
+		<Field type="checkbox" id="Google"><Label>Enable Google Vision</Label><Description></Description></Field>
+
+	    <Field id="GoogleAPIKey" type="textfield" visibleBindingId="Google" visibleBindingValue="true">
+	        <Label>Google Vision API Key:</Label>
+	    </Field>
+
+		<Field type="checkbox" id="AWS"><Label>Enable AWS Rekognition</Label><Description></Description></Field>
+
+	    <Field id="AWSAPIKey" type="textfield" visibleBindingId="AWS" visibleBindingValue="true">
+	        <Label>AWS Rekognition Access Key:</Label>
+	    </Field>
+
+	    <Field id="AWSSecretAPIKey" type="textfield" visibleBindingId="AWS" visibleBindingValue="true">
+	        <Label>AWS Rekognition Secret Key:</Label>
+	    </Field>
+
+		<Field hidden="false" type="checkbox" id="chkDebug"><Label>Debug (will produce a lot of log data)</Label><Description></Description></Field>
+
+</PluginConfig>

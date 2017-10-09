@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<Actions>
+	<Action id="sendImageGoogle">
+		<Name>Send Image to Google Vision</Name>
+		<CallbackMethod>sendImageAction</CallbackMethod>
+		<ConfigUI>
+			<Field id="locationOption" type="menu" defaultValue="static" tooltip="" default="static"> <Label>Where to get the image location:</Label>
+					<List>
+						<Option value="variable">Indigo Variable (supports both HTTP or local filesystem)</Option>
+						<Option value="static">Type in static location (supports both HTTP or local filesystem)</Option>
+					</List>
+			</Field>
+
+			<Field id="locationVariable" type="menu" default="" hidden="False" visibleBindingId="locationOption" visibleBindingValue="variable">
+				<List class="indigo.variables"></List>
+				<Label>pick a variable containing the image location (HTTP or local filesystem with full path)</Label>
+			</Field>
+
+			<Field id="location" type="textfield" defaultValue="" visibleBindingId="locationOption" visibleBindingValue="static">
+				<Label>Image (can be local full path filesystem or http):</Label>
+			</Field>
+
+		<Field id="infoLabel8" type="label"><Label>---  Applicable Events  ---</Label></Field>
+
+		<Field id="event1" type="checkbox" ><Label>Event 1:</Label><Description></Description></Field>
+		<Field id="event2" type="checkbox" ><Label>Event 2:</Label><Description></Description></Field>
+		<Field id="event3" type="checkbox" ><Label>Event 3:</Label><Description></Description></Field>
+		<Field id="event4" type="checkbox" ><Label>Event 4:</Label><Description></Description></Field>
+		<Field id="event5" type="checkbox" ><Label>Event 5:</Label><Description></Description></Field>
+		<Field id="event6" type="checkbox" ><Label>Event 6:</Label><Description></Description></Field>
+		<Field id="event7" type="checkbox" ><Label>Event 7:</Label><Description></Description></Field>
+		<Field id="event8" type="checkbox" ><Label>Event 8:</Label><Description></Description></Field>
+		<Field id="event9" type="checkbox" ><Label>Event 9:</Label><Description></Description></Field>
+		<Field id="event10" type="checkbox" ><Label>Event 10:</Label><Description></Description></Field>
+		<Field id="event11" type="checkbox" ><Label>Event 11:</Label><Description></Description></Field>
+		<Field id="event12" type="checkbox" ><Label>Event 12:</Label><Description></Description></Field>
+
+		</ConfigUI>
+
+	</Action>
+	<Action id="sendImageAWS">
+		<Name>Send Image to AWS Rekognition</Name>
+		<CallbackMethod>sendImageAction</CallbackMethod>
+		<ConfigUI>
+			<Field id="instructions"
+			            type="label">
+			        <Label>AWS Rekognition only supports files local to your system, cannot provide HTTP URLs</Label>
+			</Field>
+
+			<Field id="locationOption" type="menu" defaultValue="static" tooltip="" default="static"> <Label>Where to get the image location:</Label>
+					<List>
+						<Option value="variable">Indigo Variable (local filesystem full path)</Option>
+						<Option value="static">Type in static location (local filesystem full path)</Option>
+					</List>
+			</Field>
+
+			<Field id="locationVariable" type="menu" default="" hidden="False" visibleBindingId="locationOption" visibleBindingValue="variable">
+				<List class="indigo.variables"></List>
+				<Label>pick a variable containing the image location (local filesystem with full path)</Label>
+			</Field>
+
+			<Field id="location" type="textfield" defaultValue="" visibleBindingId="locationOption" visibleBindingValue="static">
+				<Label>Image (local filesystem full path):</Label>
+			</Field>
+
+		<Field id="infoLabel8" type="label"><Label>---  Applicable Events  ---</Label></Field>
+
+		<Field id="event1" type="checkbox" ><Label>Event 1:</Label><Description></Description></Field>
+		<Field id="event2" type="checkbox" ><Label>Event 2:</Label><Description></Description></Field>
+		<Field id="event3" type="checkbox" ><Label>Event 3:</Label><Description></Description></Field>
+		<Field id="event4" type="checkbox" ><Label>Event 4:</Label><Description></Description></Field>
+		<Field id="event5" type="checkbox" ><Label>Event 5:</Label><Description></Description></Field>
+		<Field id="event6" type="checkbox" ><Label>Event 6:</Label><Description></Description></Field>
+		<Field id="event7" type="checkbox" ><Label>Event 7:</Label><Description></Description></Field>
+		<Field id="event8" type="checkbox" ><Label>Event 8:</Label><Description></Description></Field>
+		<Field id="event9" type="checkbox" ><Label>Event 9:</Label><Description></Description></Field>
+		<Field id="event10" type="checkbox" ><Label>Event 10:</Label><Description></Description></Field>
+		<Field id="event11" type="checkbox" ><Label>Event 11:</Label><Description></Description></Field>
+		<Field id="event12" type="checkbox" ><Label>Event 12:</Label><Description></Description></Field>
+
+		</ConfigUI>
+
+	</Action>
+</Actions>
