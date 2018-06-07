@@ -10,12 +10,13 @@ import time
 import json
 import copy
 from copy import deepcopy
+import requests
 
 from ImageProcessingAdapter import ImageProcessingOptions
 from GoogleVisionAdapter import GoogleImageProcessingAdapter
 from AWSRekognitionAdapter import AWSImageProcessingAdapter
 
-from ghpu import GitHubPluginUpdater
+from distutils.version import LooseVersion
 
 DEFAULT_UPDATE_FREQUENCY = 24 # frequency of update check
 
@@ -39,9 +40,7 @@ class Plugin(indigo.PluginBase):
 		super(Plugin, self).__init__(pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
 		self.debug = pluginPrefs.get("chkDebug", False)
 
-		self.updater = GitHubPluginUpdater(self)
-		self.updater.checkForUpdate(str(self.pluginVersion))
-		self.lastUpdateCheck = datetime.datetime.now()
+		self.lastUpdateCheck = None
 		self.pollingInterval = 60
 
 		self.configServices(pluginPrefs)
@@ -57,13 +56,56 @@ class Plugin(indigo.PluginBase):
 	########################################
 	def startup(self):
 		self.debugLog(u"startup called")
-
+		self.version_check()
 
 	def checkForUpdates(self):
-		self.updater.checkForUpdate()
+		self.version_check()
 
-	def updatePlugin(self):
-		self.updater.update()
+	def version_check(self):
+		pluginId = self.pluginId
+		self.lastUpdateCheck = datetime.datetime.now()		
+
+		# Create some URLs we'll use later on
+		current_version_url = "https://api.indigodomo.com/api/v2/pluginstore/plugin-version-info.json?pluginId={}".format(pluginId)
+		store_detail_url = "https://www.indigodomo.com/pluginstore/{}/"
+		try:
+			# GET the url from the servers with a short timeout (avoids hanging the plugin)
+			reply = requests.get(current_version_url, timeout=5)
+			# This will raise an exception if the server returned an error
+			reply.raise_for_status()
+			# We now have a good reply so we get the json
+			reply_dict = reply.json()
+			plugin_dict = reply_dict["plugins"][0]
+			# Make sure that the 'latestRelease' element is a dict (could be a string for built-in plugins).
+			latest_release = plugin_dict["latestRelease"]
+			if isinstance(latest_release, dict):
+				# Compare the current version with the one returned in the reply dict
+				if LooseVersion(latest_release["number"]) > LooseVersion(self.pluginVersion):
+				# The release in the store is newer than the current version.
+				# We'll do a couple of things: first, we'll just log it
+				  self.logger.info(
+					"A new version of the plugin (v{}) is available at: {}".format(
+						latest_release["number"],
+						store_detail_url.format(plugin_dict["id"])
+					)
+				)
+		except Exception as exc:
+			self.logger.error(unicode(exc))
+
+	def runConcurrentThread(self):
+		self.logger.debug("Starting concurrent tread")
+
+		self.sleep(1)
+		
+		try:
+			while True:
+				self.sleep(int(DEFAULT_UPDATE_FREQUENCY + 1))
+
+				if self.lastUpdateCheck < datetime.datetime.now()-datetime.timedelta(hours=DEFAULT_UPDATE_FREQUENCY):
+					self.version_check()
+
+		except self.StopThread:
+			self.logger.debug("Received StopThread")
 
 	def shutdown(self):
 		self.pluginPrefs["EVENTS"] = json.dumps(self.EVENTS)
